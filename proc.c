@@ -73,6 +73,11 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  p->stime=ticks;
+  p->etime=0;
+  p->rtime=0;
+  p->iotime=0;
+
   return p;
 }
 
@@ -221,6 +226,9 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   proc->state = ZOMBIE;
+
+proc->etime=ticks;
+
   sched();
   panic("zombie exit");
 }
