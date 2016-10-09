@@ -72,8 +72,8 @@ found:
   p->context->eip = (uint)forkret;
   
 
-  p->alarmticks = 0;
-  p->alarmhandler = 0;
+  p->tickInt = 0;
+  p->tHandler = 0;
   p->ticks = 0;
   p->numTraps = 0;
   

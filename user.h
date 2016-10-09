@@ -23,8 +23,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-int count(int ticks, void (*handler)());
-int traps(void);
+int timer(int ticks, void (*handler)());
+int trapc(void);
 
 // ulib.c
 int stat(char*, struct stat*);

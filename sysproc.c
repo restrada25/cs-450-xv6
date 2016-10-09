@@ -8,7 +8,7 @@
 #include "proc.h"
 
 
-int sys_count(void) {
+int sys_timer(void) {
 
   int ticks;
   void (*handler)();
@@ -18,14 +18,14 @@ int sys_count(void) {
   if(argptr(1, (char**)&handler, 1) < 0)
     return -1;
 
-  proc->alarmticks = ticks;
-  proc->alarmhandler = handler;
+  proc->tickInt = ticks;
+  proc->tHandler = handler;
 
   return 0;
 
 }
 
-int sys_traps(void) {
+int sys_trapc(void) {
   
   return proc->numTraps;
 

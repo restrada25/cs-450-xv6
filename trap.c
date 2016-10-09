@@ -51,11 +51,11 @@ void trap(struct trapframe *tf) {
 
     if(proc && (tf->cs & 3) == 3){
       proc->ticks++;
-      if(proc->alarmticks == proc->ticks){
+      if(proc->tickInt == proc->ticks){
         proc->ticks = 0;
         tf->esp -= 4;
         *((uint *)(tf->esp)) = tf->eip;
-        tf->eip =(uint) proc->alarmhandler;
+        tf->eip =(uint) proc->tHandler;
       }
     }
       

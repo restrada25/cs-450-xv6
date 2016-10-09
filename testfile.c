@@ -2,7 +2,7 @@
 #include "stat.h"
 #include "user.h"
 
-void tickHandler();
+void tickH();
 
 int ticks = 0;
 
@@ -10,7 +10,7 @@ int main(int argc, char **argv){
 
   int i;
   int numWrites = 0;
-  count(1, tickHandler);
+  timer(1, tickH);
 
   for(i = 0; i < 500*500000; i++){
     if((i++ % 500000) == 0) {
@@ -21,13 +21,13 @@ int main(int argc, char **argv){
 
   
   printf(1, "Writes: %d\n", numWrites);
-  printf(1, "OS trap calls: %d\n", traps());
-  printf(1, "Ticks: %d\n", ticks);
+  printf(1, "Trap calls: %d\n", trapc());
+  printf(1, "Timer: %d ticks\n", ticks);
   exit();
 }
 
 
-void tickHandler() {
+void tickH() {
   
   ticks++;
 
