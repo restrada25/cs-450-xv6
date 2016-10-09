@@ -31,9 +31,7 @@ pinit(void)
 // If found, change state to EMBRYO and initialize
 // state required to run in the kernel.
 // Otherwise return 0.
-static struct proc*
-allocproc(void)
-{
+static struct proc* allocproc(void) {
   struct proc *p;
   char *sp;
 
@@ -72,7 +70,13 @@ found:
   p->context = (struct context*)sp;
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
+  
 
+  p->alarmticks = 0;
+  p->alarmhandler = 0;
+  p->ticks = 0;
+  p->numTraps = 0;
+  
   return p;
 }
 

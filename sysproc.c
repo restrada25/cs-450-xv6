@@ -7,28 +7,44 @@
 #include "mmu.h"
 #include "proc.h"
 
-int
-sys_fork(void)
-{
+
+int sys_count(void) {
+
+  int ticks;
+  void (*handler)();
+
+  if(argint(0, &ticks) < 0)
+    return -1;
+  if(argptr(1, (char**)&handler, 1) < 0)
+    return -1;
+
+  proc->alarmticks = ticks;
+  proc->alarmhandler = handler;
+
+  return 0;
+
+}
+
+int sys_traps(void) {
+  
+  return proc->numTraps;
+
+}
+
+int sys_fork(void) {
   return fork();
 }
 
-int
-sys_exit(void)
-{
+int sys_exit(void) {
   exit();
   return 0;  // not reached
 }
 
-int
-sys_wait(void)
-{
+int sys_wait(void) {
   return wait();
 }
 
-int
-sys_kill(void)
-{
+int sys_kill(void) {
   int pid;
 
   if(argint(0, &pid) < 0)
@@ -79,9 +95,7 @@ sys_sleep(void)
 
 // return how many clock tick interrupts have occurred
 // since start.
-int
-sys_uptime(void)
-{
+int sys_uptime(void) {
   uint xticks;
 
   acquire(&tickslock);

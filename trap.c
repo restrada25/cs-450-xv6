@@ -14,9 +14,7 @@ extern uint vectors[];  // in vectors.S: array of 256 entry pointers
 struct spinlock tickslock;
 uint ticks;
 
-void
-tvinit(void)
-{
+void tvinit(void) {
   int i;
 
   for(i = 0; i < 256; i++)
@@ -26,16 +24,12 @@ tvinit(void)
   initlock(&tickslock, "time");
 }
 
-void
-idtinit(void)
-{
+void idtinit(void) {
   lidt(idt, sizeof(idt));
 }
 
 //PAGEBREAK: 41
-void
-trap(struct trapframe *tf)
-{
+void trap(struct trapframe *tf) {
   if(tf->trapno == T_SYSCALL){
     if(proc->killed)
       exit();
@@ -54,6 +48,17 @@ trap(struct trapframe *tf)
       wakeup(&ticks);
       release(&tickslock);
     }
+
+    if(proc && (tf->cs & 3) == 3){
+      proc->ticks++;
+      if(proc->alarmticks == proc->ticks){
+        proc->ticks = 0;
+        tf->esp -= 4;
+        *((uint *)(tf->esp)) = tf->eip;
+        tf->eip =(uint) proc->alarmhandler;
+      }
+    }
+      
     lapiceoi();
     break;
   case T_IRQ0 + IRQ_IDE:
